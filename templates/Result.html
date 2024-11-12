@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Groupie-trackers</title>
+    <link rel="icon" href="/static/img/music.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="/">
+            <h1>Groupie Trackers</h1>
+        </a>
+    </header>
+
+    <a class="back" style="top: 100px;" href="/">←</a>
+    <center> <h1> Result : </h1> </center>
+
+    <main class="flex">
+
+        {{if not .}}
+        <h1>Cant find artists Try to search for a valid artist</h1>
+        {{end}}
+
+        {{range .}}
+        <a href="/artists?id={{.Id}}">
+            <div id="" class="card">
+                <img src="{{.Image}}">
+                <div>
+                    <h1>{{.Name}}</h1>
+                    <p><span>Creationdate : </span> {{.Creationdate}} </p>
+                    <p><span>Firstalbum :</span> {{.Firstalbum}}</p>
+                </div>
+            </div>
+        </a>
+        {{end}}
+
+    </main>
+    
+</body>
+</html>

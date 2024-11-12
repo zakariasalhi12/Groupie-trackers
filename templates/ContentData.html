@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Groupie-trackers</title>
+    <link rel="icon" type="image/x-icon" href="/static/img/music.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="/">
+            <h1>Groupie trackers</h1>
+        </a>
+    </header>
+
+    <main class="big-card">
+
+        <a class="back" href="/">←</a>
+
+
+
+        <div class="mini-card">
+
+            <h1>{{.Name}}</h1>
+
+            <div class="flex">
+                <img class="Artistimg" src="{{.Image}}">
+                <div>
+                    <div>
+                        <h2>Creation Date :</h2>
+                        <p>{{.Creationdate}}</p>
+                    </div>
+                    <div>
+                        <h2>First Album :</h2>
+                        <p>{{.Firstalbum}}</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex">
+                <div class="members">
+                    <h2>Members :</h2>
+                    {{range .Members}}<p>{{.}}</p>{{end}}
+                </div>
+                <div>
+                    <h2>Locations:</h2>
+                    {{range .LocationsData}} <p>{{.}}</p> {{end}}
+                </div>
+            </div>
+
+
+            <div class="flex">
+                <div>
+                    <h2>Dates:</h2>
+                    {{range .DatesData}} <p>{{.}}</p> {{end}}
+                </div>
+
+
+                <div>
+                    <h2>Concert Dates :</h2>
+                    {{range $location, $dates := .RelationsData}}
+                    <p class="RelationsData">{{ $location }} <span>{{range $dates}} <br> {{.}} <br> {{end}}</span></p>
+                    {{end}}
+                </div>
+
+                <div>
+                    <h2>Geolocalozation:</h2>
+                    <div id="map"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        function myMap() {
+            var locations = JSON.parse('{{.CordStr}}');
+            // Create the map, centered initially at the first location with a moderate zoom
+            var mapProp = {
+                center: new google.maps.LatLng(locations[0].Latitude, locations[0].Longitude),
+                zoom: 0, // Adjusted zoom level
+            };
+            var map = new google.maps.Map(document.getElementById("map"), mapProp);
+    
+            // Create a bounds object to automatically adjust the map to fit all markers
+            var bounds = new google.maps.LatLngBounds();
+    
+            locations.forEach(function(location) {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(location.Latitude, location.Longitude),
+                    map: map,
+                });
+                
+                bounds.extend(marker.getPosition());
+            });
+    
+            map.fitBounds(bounds);
+        }
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=Your-API-Key&callback=myMap" async defer></script>
+</body>
+
+</html>
